@@ -66,6 +66,7 @@ final class HotkeyChordTests: XCTestCase {
         chord.reset()
         XCTAssertFalse(chord.isActive)
         XCTAssertFalse(chord.keyDown("p", isRepeat: false))
+        chord.reset()
         XCTAssertTrue(activate(&chord))
     }
 
