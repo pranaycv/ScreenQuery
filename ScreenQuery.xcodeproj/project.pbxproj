@@ -1,0 +1,406 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B10000000000000000000001 /* ScreenQueryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000001 /* ScreenQueryApp.swift */; };
+		B10000000000000000000002 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000002 /* AppModel.swift */; };
+		B10000000000000000000003 /* HotkeyChord.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000003 /* HotkeyChord.swift */; };
+		B10000000000000000000004 /* ScreenshotPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000004 /* ScreenshotPaths.swift */; };
+		B10000000000000000000005 /* LLMEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000005 /* LLMEndpoint.swift */; };
+		B10000000000000000000006 /* LLMResponseParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000006 /* LLMResponseParser.swift */; };
+		B10000000000000000000007 /* GlobalHotkeyMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000007 /* GlobalHotkeyMonitor.swift */; };
+		B10000000000000000000008 /* ScreenshotService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000008 /* ScreenshotService.swift */; };
+		B10000000000000000000009 /* ScreenshotSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000009 /* ScreenshotSaver.swift */; };
+		B1000000000000000000000A /* ImageEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000A /* ImageEncoder.swift */; };
+		B1000000000000000000000B /* LLMClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000B /* LLMClient.swift */; };
+		B1000000000000000000000C /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000C /* KeychainStore.swift */; };
+		B1000000000000000000000D /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000D /* SettingsStore.swift */; };
+		B1000000000000000000000E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000E /* SettingsView.swift */; };
+		B1000000000000000000000F /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1000000000000000000000F /* SettingsWindowController.swift */; };
+		B10000000000000000000010 /* PermissionCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000010 /* PermissionCenter.swift */; };
+		B10000000000000000000011 /* StatusOverlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000011 /* StatusOverlayController.swift */; };
+		B10000000000000000000012 /* StatusOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000012 /* StatusOverlayView.swift */; };
+		B10000000000000000000013 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000013 /* Assets.xcassets */; };
+		B10000000000000000000014 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = F10000000000000000000014 /* PrivacyInfo.xcprivacy */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F10000000000000000000001 /* ScreenQueryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenQueryApp.swift; sourceTree = "<group>"; };
+		F10000000000000000000002 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		F10000000000000000000003 /* HotkeyChord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyChord.swift; sourceTree = "<group>"; };
+		F10000000000000000000004 /* ScreenshotPaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotPaths.swift; sourceTree = "<group>"; };
+		F10000000000000000000005 /* LLMEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMEndpoint.swift; sourceTree = "<group>"; };
+		F10000000000000000000006 /* LLMResponseParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMResponseParser.swift; sourceTree = "<group>"; };
+		F10000000000000000000007 /* GlobalHotkeyMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotkeyMonitor.swift; sourceTree = "<group>"; };
+		F10000000000000000000008 /* ScreenshotService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotService.swift; sourceTree = "<group>"; };
+		F10000000000000000000009 /* ScreenshotSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotSaver.swift; sourceTree = "<group>"; };
+		F1000000000000000000000A /* ImageEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEncoder.swift; sourceTree = "<group>"; };
+		F1000000000000000000000B /* LLMClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMClient.swift; sourceTree = "<group>"; };
+		F1000000000000000000000C /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		F1000000000000000000000D /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		F1000000000000000000000E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F1000000000000000000000F /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
+		F10000000000000000000010 /* PermissionCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionCenter.swift; sourceTree = "<group>"; };
+		F10000000000000000000011 /* StatusOverlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusOverlayController.swift; sourceTree = "<group>"; };
+		F10000000000000000000012 /* StatusOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusOverlayView.swift; sourceTree = "<group>"; };
+		F10000000000000000000013 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F10000000000000000000014 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		F10000000000000000000015 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F10000000000000000000016 /* ScreenQuery.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScreenQuery.entitlements; sourceTree = "<group>"; };
+		F10000000000000000000017 /* ScreenQuery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenQuery.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A10000000000000000000013 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A10000000000000000000003 = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000004 /* ScreenQuery */,
+				A10000000000000000000005 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A10000000000000000000004 /* ScreenQuery */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000006 /* App */,
+				A10000000000000000000007 /* Core */,
+				A10000000000000000000008 /* Hotkey */,
+				A10000000000000000000009 /* Capture */,
+				A1000000000000000000000A /* LLM */,
+				A1000000000000000000000B /* Security */,
+				A1000000000000000000000C /* Settings */,
+				A1000000000000000000000D /* Permissions */,
+				A1000000000000000000000E /* Overlay */,
+				F10000000000000000000013 /* Assets.xcassets */,
+				F10000000000000000000014 /* PrivacyInfo.xcprivacy */,
+				F10000000000000000000015 /* Info.plist */,
+				F10000000000000000000016 /* ScreenQuery.entitlements */,
+			);
+			path = ScreenQuery;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000005 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000017 /* ScreenQuery.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000006 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000001 /* ScreenQueryApp.swift */,
+				F10000000000000000000002 /* AppModel.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000007 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000003 /* HotkeyChord.swift */,
+				F10000000000000000000004 /* ScreenshotPaths.swift */,
+				F10000000000000000000005 /* LLMEndpoint.swift */,
+				F10000000000000000000006 /* LLMResponseParser.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000008 /* Hotkey */ = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000007 /* GlobalHotkeyMonitor.swift */,
+			);
+			path = Hotkey;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000009 /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000008 /* ScreenshotService.swift */,
+				F10000000000000000000009 /* ScreenshotSaver.swift */,
+				F1000000000000000000000A /* ImageEncoder.swift */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
+		A1000000000000000000000A /* LLM */ = {
+			isa = PBXGroup;
+			children = (
+				F1000000000000000000000B /* LLMClient.swift */,
+			);
+			path = LLM;
+			sourceTree = "<group>";
+		};
+		A1000000000000000000000B /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				F1000000000000000000000C /* KeychainStore.swift */,
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
+		A1000000000000000000000C /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				F1000000000000000000000D /* SettingsStore.swift */,
+				F1000000000000000000000E /* SettingsView.swift */,
+				F1000000000000000000000F /* SettingsWindowController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		A1000000000000000000000D /* Permissions */ = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000010 /* PermissionCenter.swift */,
+			);
+			path = Permissions;
+			sourceTree = "<group>";
+		};
+		A1000000000000000000000E /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				F10000000000000000000011 /* StatusOverlayController.swift */,
+				F10000000000000000000012 /* StatusOverlayView.swift */,
+			);
+			path = Overlay;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A10000000000000000000001 /* ScreenQuery */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000000000000000000022 /* Build configuration list for PBXNativeTarget "ScreenQuery" */;
+			buildPhases = (
+				A10000000000000000000011 /* Sources */,
+				A10000000000000000000013 /* Frameworks */,
+				A10000000000000000000012 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ScreenQuery;
+			productName = ScreenQuery;
+			productReference = F10000000000000000000017 /* ScreenQuery.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A10000000000000000000002 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				ORGANIZATIONNAME = ScreenQuery;
+				TargetAttributes = {
+					A10000000000000000000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = A10000000000000000000021 /* Build configuration list for PBXProject "ScreenQuery" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A10000000000000000000003;
+			productRefGroup = A10000000000000000000005 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A10000000000000000000001 /* ScreenQuery */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A10000000000000000000012 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B10000000000000000000013 /* Assets.xcassets in Resources */,
+				B10000000000000000000014 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A10000000000000000000011 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B10000000000000000000001 /* ScreenQueryApp.swift in Sources */,
+				B10000000000000000000002 /* AppModel.swift in Sources */,
+				B10000000000000000000003 /* HotkeyChord.swift in Sources */,
+				B10000000000000000000004 /* ScreenshotPaths.swift in Sources */,
+				B10000000000000000000005 /* LLMEndpoint.swift in Sources */,
+				B10000000000000000000006 /* LLMResponseParser.swift in Sources */,
+				B10000000000000000000007 /* GlobalHotkeyMonitor.swift in Sources */,
+				B10000000000000000000008 /* ScreenshotService.swift in Sources */,
+				B10000000000000000000009 /* ScreenshotSaver.swift in Sources */,
+				B1000000000000000000000A /* ImageEncoder.swift in Sources */,
+				B1000000000000000000000B /* LLMClient.swift in Sources */,
+				B1000000000000000000000C /* KeychainStore.swift in Sources */,
+				B1000000000000000000000D /* SettingsStore.swift in Sources */,
+				B1000000000000000000000E /* SettingsView.swift in Sources */,
+				B1000000000000000000000F /* SettingsWindowController.swift in Sources */,
+				B10000000000000000000010 /* PermissionCenter.swift in Sources */,
+				B10000000000000000000011 /* StatusOverlayController.swift in Sources */,
+				B10000000000000000000012 /* StatusOverlayView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A10000000000000000000023 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A10000000000000000000024 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A10000000000000000000025 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ScreenQuery/ScreenQuery.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ScreenQuery/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.screenquery.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A10000000000000000000026 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ScreenQuery/ScreenQuery.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = ScreenQuery/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.screenquery.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A10000000000000000000021 /* Build configuration list for PBXProject "ScreenQuery" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000023 /* Debug */,
+				A10000000000000000000024 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A10000000000000000000022 /* Build configuration list for PBXNativeTarget "ScreenQuery" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000025 /* Debug */,
+				A10000000000000000000026 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A10000000000000000000002 /* Project object */;
+}
