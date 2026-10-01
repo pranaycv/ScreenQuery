@@ -29,14 +29,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Python 3.12 with Tk
+      - name: Select Python 3.12 with Tk
+        id: python
         run: |
           set -euo pipefail
           export HOMEBREW_NO_AUTO_UPDATE=1
-          brew install python@3.12
-          echo "$(brew --prefix python@3.12)/bin" >> "$GITHUB_PATH"
+          export HOMEBREW_NO_ENV_HINTS=1
+          framework="/Library/Frameworks/Python.framework/Versions/3.12/bin/python3.12"
+          if [[ -x "$framework" ]] && "$framework" -c "import tkinter" >/dev/null 2>&1; then
+            echo "python=$framework" >> "$GITHUB_OUTPUT"
+            "$framework" -c "import sys, tkinter; print(sys.executable, sys.version, 'tk', tkinter.TkVersion)"
+            exit 0
+          fi
+          # Homebrew split Tk out of python@3.12. A link conflict must not hide a usable cellar binary.
+          brew install python-tk@3.12 || true
+          py="$(brew --prefix python@3.12)/bin/python3.12"
+          "$py" -c "import sys, tkinter; print(sys.executable, sys.version, 'tk', tkinter.TkVersion)"
+          echo "python=$py" >> "$GITHUB_OUTPUT"
 
       - name: Build the disk image
+        env:
+          PYTHON: ${{ steps.python.outputs.python }}
         run: |
           set -euo pipefail
           chmod +x scripts/build-dmg.sh

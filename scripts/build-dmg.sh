@@ -26,9 +26,9 @@ if [[ -z "${VIRTUAL_ENV:-}" ]]; then
 fi
 
 python -m pip install -r requirements-build.txt
-python -c "import tkinter" || {
+python -c "import sys, tkinter; print(sys.executable, sys.version)" || {
   echo "This Python has no Tk, so the Mac app cannot open its window." >&2
-  echo "Install a Python that includes Tk: brew install python@3.12" >&2
+  echo "Install a Python that includes Tk: brew install python-tk@3.12" >&2
   exit 1
 }
 
