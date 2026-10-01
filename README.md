@@ -6,6 +6,30 @@ It is one Python application, packaged the same way EyesRhythm ships both platfo
 
 The app ships with no API key. Paste your own in Settings. It is stored in the system keychain (macOS Keychain or Windows Credential Manager), never in `settings.json` and never in this repository.
 
+## Download for Mac
+
+A Mac build is published as a disk image you can download. Pick the file that matches Apple menu → About This Mac:
+
+- Apple silicon (M1 or later): [ScreenQuery-arm64.dmg](https://github.com/pranaycv/ScreenQuery/releases/download/v1.0.0-test/ScreenQuery-arm64.dmg)
+- Intel: [ScreenQuery-x86_64.dmg](https://github.com/pranaycv/ScreenQuery/releases/download/v1.0.0-test/ScreenQuery-x86_64.dmg)
+
+Both files are on the [v1.0.0-test prerelease](https://github.com/pranaycv/ScreenQuery/releases/tag/v1.0.0-test). GitHub rebuilds them from this branch on a Mac.
+
+The build is not notarized, so macOS warns the first time.
+
+1. Open the DMG and drag **ScreenQuery** onto **Applications**. `How to Open.txt` in the disk image repeats these steps.
+2. Eject the disk image.
+3. In Applications, Control-click **ScreenQuery** and choose **Open**, then **Open** again.
+4. If macOS says the app is damaged, run this in Terminal and open the app again:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/ScreenQuery.app
+```
+
+5. Settings opens in front. The menu-bar title is **SQ**.
+6. Allow **Screen Recording** and **Input Monitoring**, quit ScreenQuery, and open it again. macOS ties those grants to this copy of the app.
+7. Hold Shift and press S and P.
+
 ## Requirements
 
 - Windows 10 or later, or macOS 12 or later
@@ -145,9 +169,9 @@ The screenshot stays on the machine unless **Send to OpenAI** is on. In that cas
 - `scripts/build-dmg.sh` — macOS app and DMG
 - `scripts/build-windows.ps1` — Windows executable
 - `scripts/entitlements.plist` — hardened-runtime exceptions for the Mac build
+- `.github/workflows/macos-dmg.yml` — builds the Apple silicon and Intel disk images and publishes the test release
 
 ## Follow-ups
 
-- Run the app on a real Windows PC and a real Mac, including save only, OpenAI only, and both.
-- Confirm the macOS Screen Recording and Input Monitoring prompts, then quit and reopen that same binary.
-- Notarize with an Apple Developer ID before sharing the DMG.
+- Exercise save only, OpenAI only, and both on the downloaded app.
+- Notarize with an Apple Developer ID before sharing a build that opens without the Gatekeeper warning.

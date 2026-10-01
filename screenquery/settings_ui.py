@@ -26,7 +26,7 @@ class SettingsWindow:
     def show(self) -> None:
         if self.win is not None and self.win.winfo_exists():
             self.win.deiconify()
-            self.win.lift()
+            _bring_to_front(self.win)
             return
         win = tk.Toplevel(self.root)
         self.win = win
@@ -156,11 +156,13 @@ class SettingsWindow:
         ttk.Button(controls, text="Capture Now", command=self.app.capture).pack(side="left", padx=(0, 8))
         ttk.Button(controls, text="Quit", command=self.app.quit).pack(side="left")
         frame.columnconfigure(0, weight=1)
+        _bring_to_front(win)
 
     def _close(self) -> None:
         if self.app.tray_running:
             if self.win is not None:
                 self.win.withdraw()
+            _return_to_menu_bar()
         else:
             self.app.quit()
 
@@ -246,6 +248,38 @@ class SettingsWindow:
         ttk.Button(row, text="Request Screen Recording", command=Quartz.CGRequestScreenCaptureAccess).pack(side="left", padx=(0, 6))
         if hasattr(Quartz, "CGRequestListenEventAccess"):
             ttk.Button(row, text="Request Input Monitoring", command=Quartz.CGRequestListenEventAccess).pack(side="left")
+
+
+def _bring_to_front(win: tk.Toplevel) -> None:
+    """Menu-bar apps stay in the background unless Settings asks to be shown."""
+    win.lift()
+    win.focus_force()
+    if sys.platform == "darwin":
+        try:
+            from AppKit import NSApplication, NSApplicationActivationPolicyRegular
+
+            app = NSApplication.sharedApplication()
+            app.setActivationPolicy_(NSApplicationActivationPolicyRegular)
+            app.activateIgnoringOtherApps_(True)
+        except Exception:
+            return
+        return
+    try:
+        win.attributes("-topmost", True)
+        win.after(400, lambda: win.attributes("-topmost", False))
+    except tk.TclError:
+        return
+
+
+def _return_to_menu_bar() -> None:
+    if sys.platform != "darwin":
+        return
+    try:
+        from AppKit import NSApplication, NSApplicationActivationPolicyAccessory
+
+        NSApplication.sharedApplication().setActivationPolicy_(NSApplicationActivationPolicyAccessory)
+    except Exception:
+        return
 
 
 def _title_font():

@@ -1,0 +1,96 @@
+name: macOS DMG
+
+on:
+  push:
+    branches:
+      - cursor/screenquery-macos-app-da12
+  workflow_dispatch:
+
+concurrency:
+  group: macos-dmg-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ${{ matrix.arch }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            arch: arm64
+          - runner: macos-15-intel
+            arch: x86_64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Python 3.12 with Tk
+        run: |
+          set -euo pipefail
+          export HOMEBREW_NO_AUTO_UPDATE=1
+          brew install python@3.12
+          echo "$(brew --prefix python@3.12)/bin" >> "$GITHUB_PATH"
+
+      - name: Build the disk image
+        run: |
+          set -euo pipefail
+          chmod +x scripts/build-dmg.sh
+          ./scripts/build-dmg.sh
+          mv dist/ScreenQuery.dmg "dist/ScreenQuery-${{ matrix.arch }}.dmg"
+          ls -lh "dist/ScreenQuery-${{ matrix.arch }}.dmg"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ScreenQuery-${{ matrix.arch }}
+          path: dist/ScreenQuery-${{ matrix.arch }}.dmg
+          if-no-files-found: error
+
+  release:
+    name: Publish test DMGs
+    needs: build
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ScreenQuery-*
+          path: dist
+          merge-multiple: true
+
+      - name: Attach the disk images to the test release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          files=(dist/*.dmg)
+          if [[ ${#files[@]} -eq 0 ]]; then
+            echo "No DMG was produced." >&2
+            exit 1
+          fi
+          ls -lh "${files[@]}"
+          if gh release view v1.0.0-test >/dev/null 2>&1; then
+            gh release upload v1.0.0-test "${files[@]}" --clobber
+            gh release edit v1.0.0-test \
+              --prerelease \
+              --target "$GITHUB_SHA" \
+              --title "ScreenQuery macOS test build" \
+              --notes-file scripts/release-notes-macos.txt
+          else
+            gh release create v1.0.0-test "${files[@]}" \
+              --prerelease \
+              --target "$GITHUB_SHA" \
+              --title "ScreenQuery macOS test build" \
+              --notes-file scripts/release-notes-macos.txt
+          fi
+          if [[ "${{ needs.build.result }}" != "success" ]]; then
+            echo "One of the Mac builds failed. Publishing the disk images that succeeded." >&2
+            exit 1
+          fi
