@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "screenquery"
+version = "1.0.0"
+description = "Capture the desktop with Shift+S+P on Windows and macOS, save a PNG, and optionally ask OpenAI."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "mss>=9.0.1",
+  "Pillow>=10.0",
+  "pynput>=1.7.6",
+  "pystray>=0.19.5",
+  "keyring>=25.0",
+  "pyobjc-framework-Cocoa>=10.0; sys_platform == 'darwin'",
+  "pyobjc-framework-Quartz>=10.0; sys_platform == 'darwin'",
+]
+
+[project.scripts]
+screenquery = "screenquery.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["screenquery*"]

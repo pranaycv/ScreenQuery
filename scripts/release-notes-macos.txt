@@ -1,0 +1,10 @@
+Test builds of ScreenQuery for macOS.
+
+- ScreenQuery-arm64.dmg — Apple silicon (M1 or later). About This Mac says Chip: Apple M1, M2, M3, or M4.
+- ScreenQuery-x86_64.dmg — Intel Mac.
+
+Drag ScreenQuery to Applications, eject the disk image, then Control-click the app and choose Open. This build is not notarized, so Gatekeeper warns the first time. If macOS says the app is damaged, run:
+
+xattr -dr com.apple.quarantine /Applications/ScreenQuery.app
+
+Settings opens in front. Allow Screen Recording and Input Monitoring, quit, and open ScreenQuery again. Hold Shift and press S and P.
