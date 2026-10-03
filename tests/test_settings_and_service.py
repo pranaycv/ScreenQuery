@@ -98,8 +98,86 @@ class SettingsAndServiceTests(unittest.TestCase):
         self.assertEqual(both.answer, "A window.")
         self.assertIsNotNone(both.save_full)
 
-        off = perform_capture(Settings(False, False), image, save, explain, lambda: None, home)
+        off = perform_capture(
+            Settings(False, False, clipboard_enabled=False),
+            image,
+            save,
+            explain,
+            lambda: None,
+            home,
+        )
         self.assertTrue(off.banner_is_error)
+
+    def test_clipboard_is_on_by_default_and_failure_still_saves(self):
+        self.assertTrue(Settings().clipboard_enabled)
+        loaded = Settings.from_dict({"save_enabled": True})
+        self.assertTrue(loaded.clipboard_enabled)
+
+        copied = []
+
+        def copy(img):
+            copied.append(img)
+
+        home = Path("/Users/ada")
+        image = object()
+        only_clip = perform_capture(
+            Settings(save_enabled=False, llm_enabled=False, clipboard_enabled=True),
+            image,
+            lambda *_args: home / "nope.png",
+            lambda *_args: "no",
+            lambda: None,
+            home,
+            copy_png=copy,
+        )
+        self.assertEqual(copied, [image])
+        self.assertTrue(only_clip.clipboard_copied)
+        self.assertIsNone(only_clip.save_full)
+        self.assertEqual(only_clip.to_dict()["clipboard_note"], "Screenshot is on the clipboard.")
+
+        def boom(_img):
+            raise RuntimeError("pasteboard busy")
+
+        failed = perform_capture(
+            Settings(save_enabled=True, llm_enabled=False, clipboard_enabled=True),
+            image,
+            lambda _img, _folder: home / "ScreenQuery" / "a.png",
+            lambda *_args: "no",
+            lambda: None,
+            home,
+            copy_png=boom,
+        )
+        self.assertEqual(failed.clipboard_error, "pasteboard busy")
+        self.assertEqual(failed.save_display, "~/ScreenQuery/a.png")
+
+    def test_openai_error_is_kept_and_stale_popup_hide_is_ignored(self):
+        def explain(*_args):
+            raise RuntimeError("Your API key has been invalidated. (HTTP 401)")
+
+        status = perform_capture(
+            Settings(save_enabled=True, llm_enabled=True, clipboard_enabled=False),
+            object(),
+            lambda _img, _folder: Path("/Users/ada/ScreenQuery/a.png"),
+            explain,
+            lambda: "sk-test",
+            Path("/Users/ada"),
+        )
+        self.assertIn("invalidated", status.llm_error)
+        self.assertIsNone(status.answer)
+        self.assertIsNotNone(status.save_display)
+
+        from screenquery.ui_server import UiServer
+
+        class _App:
+            pass
+
+        ui = UiServer(_App())
+        first = ui.publish(Status(save_display="~/a.png"))
+        second = ui.publish(Status(llm_error="Your API key has been invalidated. (HTTP 401)"))
+        self.assertFalse(ui.hide_status(first))
+        self.assertTrue(ui.snapshot()["visible"])
+        self.assertIn("invalidated", ui.snapshot()["status"]["llm_error"])
+        self.assertTrue(ui.hide_status(second))
+        self.assertFalse(ui.snapshot()["visible"])
 
     def test_save_failure_still_reports_the_answer(self):
         def save(_img, _folder):
@@ -121,7 +199,7 @@ class SettingsAndServiceTests(unittest.TestCase):
         when = datetime(2026, 10, 1, 22, 35, 7, 123000, tzinfo=timezone.utc)
         path = save_png(FakeImage(), None, when=when, home=home)
         self.assertEqual(path.parent, home / "ScreenQuery" / "2026-10-01")
-        self.assertEqual(path.name, "ScreenQuery-20261001-223507-123.png")
+        self.assertEqual(path.name, "ScreenQuery-223507-123.png")
         self.assertTrue(path.is_file())
         again = save_png(FakeImage(), None, when=when, home=home)
         self.assertTrue(again.name.endswith("-2.png"))
@@ -132,7 +210,7 @@ class SettingsAndServiceTests(unittest.TestCase):
 
     def test_dismiss_timing(self):
         self.assertIsNone(dismiss_seconds(Status(llm_working=True)))
-        self.assertEqual(dismiss_seconds(Status(answer="hi")), 20)
+        self.assertEqual(dismiss_seconds(Status(answer="hi")), 30)
         self.assertEqual(dismiss_seconds(Status(banner="nope", banner_is_error=True)), 12)
         self.assertEqual(dismiss_seconds(Status(save_display="~/a.png")), 8)
 
@@ -150,7 +228,7 @@ class SettingsAndServiceTests(unittest.TestCase):
         )
 
     def test_permission_copy_mentions_the_platform(self):
-        self.assertIn("Screen Recording", permission_help("darwin"))
+        self.assertIn("Screen & System Audio Recording", permission_help("darwin"))
         self.assertIn("Input Monitoring", permission_help("darwin"))
         self.assertIn("Windows", permission_help("win32"))
 

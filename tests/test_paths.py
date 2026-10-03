@@ -18,28 +18,30 @@ class DestinationPathTests(unittest.TestCase):
         path = resolve_directory("   ", self.when, self.home)
         self.assertEqual(path, self.home / "ScreenQuery" / "2026-10-01")
 
-    def test_custom_folder_is_used_directly(self):
+    def test_custom_folder_gets_a_date_subfolder(self):
         path = resolve_directory("/tmp/shots/", self.when, self.home)
-        self.assertEqual(path, Path("/tmp/shots"))
+        self.assertEqual(path, Path("/tmp/shots") / "2026-10-01")
 
     def test_tilde_custom_folder_expands_against_provided_home(self):
         path = resolve_directory("~/Pictures/Shots", self.when, self.home)
-        self.assertEqual(path, Path("/Users/ada/Pictures/Shots"))
+        self.assertEqual(path, Path("/Users/ada/Pictures/Shots") / "2026-10-01")
 
     def test_relative_custom_folder_is_under_home(self):
         path = resolve_directory("Shots", self.when, self.home)
-        self.assertEqual(path, Path("/Users/ada/Shots"))
+        self.assertEqual(path, Path("/Users/ada/Shots") / "2026-10-01")
 
-    def test_filename_is_timestamped(self):
-        self.assertEqual(filename(self.when), "ScreenQuery-20261001-223507-123.png")
+    def test_filename_is_time_only(self):
+        self.assertEqual(filename(self.when), "ScreenQuery-223507-123.png")
+        self.assertNotIn("2026", filename(self.when))
+        self.assertNotIn("1001", filename(self.when))
 
     def test_unique_filename_appends_a_counter(self):
-        preferred = "ScreenQuery-20261001-223507-123.png"
+        preferred = "ScreenQuery-223507-123.png"
         self.assertEqual(unique_filename(preferred, set()), preferred)
-        self.assertEqual(unique_filename(preferred, {preferred}), "ScreenQuery-20261001-223507-123-2.png")
+        self.assertEqual(unique_filename(preferred, {preferred}), "ScreenQuery-223507-123-2.png")
         self.assertEqual(
-            unique_filename(preferred, {preferred, "ScreenQuery-20261001-223507-123-2.png"}),
-            "ScreenQuery-20261001-223507-123-3.png",
+            unique_filename(preferred, {preferred, "ScreenQuery-223507-123-2.png"}),
+            "ScreenQuery-223507-123-3.png",
         )
 
     def test_path_abbreviation(self):

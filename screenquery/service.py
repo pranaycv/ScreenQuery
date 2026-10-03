@@ -13,7 +13,13 @@ MISSING_KEY = (
     "No OpenAI API key yet. Open Settings and paste a key. "
     "ScreenQuery stores it in the system keychain, not in preferences."
 )
-NOTHING_ENABLED = "Turn on Save screenshot, Send to OpenAI, or both in Settings."
+NOTHING_ENABLED = (
+    "Turn on Save screenshot, Copy to clipboard, Send to OpenAI, or a combination in Settings."
+)
+SENDING_OFF = (
+    "Send to OpenAI is off, so there is no model reply. "
+    "Your key is saved. Turn on Send to OpenAI in Settings."
+)
 
 
 def perform_capture(
@@ -23,11 +29,19 @@ def perform_capture(
     explain: Callable,
     load_key: Callable[[], str | None],
     home: Path,
+    copy_png: Callable | None = None,
 ) -> Status:
-    if not settings.save_enabled and not settings.llm_enabled:
+    clipboard_on = bool(getattr(settings, "clipboard_enabled", True))
+    if not settings.save_enabled and not settings.llm_enabled and not clipboard_on:
         return Status(banner=NOTHING_ENABLED, banner_is_error=True)
 
     status = Status()
+    if clipboard_on and copy_png is not None:
+        try:
+            copy_png(image)
+            status.clipboard_copied = True
+        except Exception as exc:  # noqa: BLE001 - show the clipboard message
+            status.clipboard_error = str(exc)
     if settings.save_enabled:
         try:
             path = Path(save_png(image, settings.custom_folder))

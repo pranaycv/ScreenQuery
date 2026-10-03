@@ -16,13 +16,31 @@ DEFAULT_MODEL = "gpt-4o"
 MAX_OUTPUT_TOKENS = 1200
 
 PROMPT = (
-    "You are ScreenQuery. The user just captured their screen with a hotkey. "
-    "Read the screenshot and respond to whatever question, problem, error message, "
-    "code, or other content is visible. If there is a clear question, answer it. "
-    "If there is an error or code, explain what it means and how to fix it. "
-    "If nothing asks a question, give a short explanation of what is on screen. "
-    "Be direct and useful. Use plain text."
+    "You are ScreenQuery. Look at the screenshot. "
+    "If it shows a question, a problem, a quiz, or anything that wants an answer, "
+    "reply with only the answer. Be direct. Do not restate the question and do not add a label. "
+    "If it is not a question, describe the topic in two or three sentences. "
+    "Use very easy words, as if you are explaining it to a friend. "
+    "When you write more than one sentence, put each sentence on its own line. "
+    "Plain text."
 )
+
+REGION_PROMPT = (
+    "You are ScreenQuery. The user dragged a rectangle around a small part of the screen. "
+    "If that crop is one word, or only one line of text, explain what that word or that line means. "
+    "Use two or three sentences and very easy words. "
+    "If the crop is a question, a problem, or a quiz, reply with only the answer. "
+    "Be direct. Do not restate the question and do not add a label. "
+    "Otherwise describe what is in the crop in two or three sentences, in very easy words. "
+    "When you write more than one sentence, put each sentence on its own line. "
+    "Plain text."
+)
+
+
+def prompt_for(kind: str | None) -> str:
+    if kind == "region":
+        return REGION_PROMPT
+    return PROMPT
 
 
 class OpenAIError(Exception):
@@ -76,6 +94,7 @@ def json_body(
     image_data: bytes,
     mime_type: str,
     token_field: str = "max_tokens",
+    kind: str = "window",
 ) -> bytes:
     import base64
 
@@ -88,12 +107,12 @@ def json_body(
             {
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": PROMPT},
+                    {"type": "text", "text": prompt_for(kind)},
                     {
                         "type": "image_url",
                         "image_url": {
                             "url": f"data:{mime_type};base64,{base64.b64encode(image_data).decode('ascii')}",
-                            "detail": "auto",
+                            "detail": "high" if kind == "region" else "auto",
                         },
                     },
                 ],
@@ -169,10 +188,11 @@ def explain(
     base_url: str,
     model: str | None,
     urlopen_fn=urlopen,
+    kind: str = "window",
 ) -> str:
     try:
         return _send(
-            image_data, mime_type, api_key, base_url, model, "max_tokens", urlopen_fn
+            image_data, mime_type, api_key, base_url, model, "max_tokens", urlopen_fn, kind
         )
     except OpenAIError as exc:
         if should_retry_replacing_max_tokens(str(exc)):
@@ -184,6 +204,7 @@ def explain(
                 model,
                 "max_completion_tokens",
                 urlopen_fn,
+                kind,
             )
         raise
 
@@ -196,9 +217,10 @@ def _send(
     model: str | None,
     token_field: str,
     urlopen_fn,
+    kind: str = "window",
 ) -> str:
     url = endpoint(base_url)
-    body = json_body(model, image_data, mime_type, token_field)
+    body = json_body(model, image_data, mime_type, token_field, kind)
     request = Request(
         url,
         data=body,

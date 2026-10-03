@@ -34,24 +34,13 @@ class SettingsWindow:
         win.geometry("640x760")
         win.minsize(560, 640)
         win.protocol("WM_DELETE_WINDOW", self._close)
+        # A canvas-hosted form stays blank on macOS Tk (the scrollbar shows, the
+        # controls do not). Pack the form directly so it paints.
         style = ttk.Style(win)
-        if "clam" in style.theme_names():
+        if sys.platform != "darwin" and "clam" in style.theme_names():
             style.theme_use("clam")
-
-        canvas = tk.Canvas(win, highlightthickness=0)
-        scroll = ttk.Scrollbar(win, orient="vertical", command=canvas.yview)
-        canvas.configure(yscrollcommand=scroll.set)
-        scroll.pack(side="right", fill="y")
-        canvas.pack(side="left", fill="both", expand=True)
-        frame = ttk.Frame(canvas, padding=16)
-        window_id = canvas.create_window((0, 0), window=frame, anchor="nw")
-
-        def _fit(_event=None):
-            canvas.configure(scrollregion=canvas.bbox("all"))
-            canvas.itemconfigure(window_id, width=canvas.winfo_width())
-
-        frame.bind("<Configure>", _fit)
-        canvas.bind("<Configure>", _fit)
+        frame = ttk.Frame(win, padding=16)
+        frame.pack(fill="both", expand=True)
 
         settings = self.app.settings_store.load()
         self.save_var = tk.BooleanVar(value=settings.save_enabled)
@@ -99,7 +88,7 @@ class SettingsWindow:
         ttk.Button(folder, text="Use Default", command=self._use_default).grid(row=1, column=1, sticky="w", padx=8)
         ttk.Label(
             folder,
-            text="Default is ~/ScreenQuery/<date>/. A chosen folder is used directly. Names are timestamped.",
+            text="Every capture goes in a date folder: <base>/<YYYY-MM-DD>/ScreenQuery-<time>.png. The default base is ~/ScreenQuery.",
             wraplength=540,
         ).grid(row=2, column=0, columnspan=3, sticky="w")
 
@@ -227,9 +216,7 @@ class SettingsWindow:
         folder = self.folder_var.get().strip() or None
         path = resolve_directory(folder, datetime.now().astimezone(), Path.home())
         shown = abbreviate(path, Path.home())
-        if folder:
-            return f"Saves directly to {shown}"
-        return f"Saves to {shown} (a new folder each day)"
+        return f"Saves to {shown}"
 
     def _toggle_login(self) -> None:
         try:
@@ -255,19 +242,24 @@ def _bring_to_front(win: tk.Toplevel) -> None:
     win.lift()
     win.focus_force()
     if sys.platform == "darwin":
-        try:
-            from AppKit import NSApplication, NSApplicationActivationPolicyRegular
-
-            app = NSApplication.sharedApplication()
-            app.setActivationPolicy_(NSApplicationActivationPolicyRegular)
-            app.activateIgnoringOtherApps_(True)
-        except Exception:
-            return
+        # Delay past the current event so activation does not nest inside Tk.
+        win.after(1, _activate_settings_app)
         return
     try:
         win.attributes("-topmost", True)
         win.after(400, lambda: win.attributes("-topmost", False))
     except tk.TclError:
+        return
+
+
+def _activate_settings_app() -> None:
+    try:
+        from AppKit import NSApplication, NSApplicationActivationPolicyRegular
+
+        app = NSApplication.sharedApplication()
+        app.setActivationPolicy_(NSApplicationActivationPolicyRegular)
+        app.activateIgnoringOtherApps_(True)
+    except Exception:
         return
 
 

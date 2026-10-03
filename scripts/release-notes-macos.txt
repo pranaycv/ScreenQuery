@@ -1,7 +1,10 @@
-Test builds of ScreenQuery for macOS.
+Test builds of ScreenQuery.
 
 - ScreenQuery-arm64.dmg — Apple silicon (M1 or later). About This Mac says Chip: Apple M1, M2, M3, or M4.
 - ScreenQuery-x86_64.dmg — Intel Mac.
+- ScreenQuery.exe — Windows 10 or later. Double-click it. No installer.
+
+Hold Shift and press S and P together to capture the front window. Hold Shift and press S and O together to drag a rectangle. Shift+S alone does nothing.
 
 Drag ScreenQuery to Applications, eject the disk image, then Control-click the app and choose Open. This build is not notarized, so Gatekeeper warns the first time. If macOS says the app is damaged, run:
 

@@ -6,14 +6,15 @@ It is one Python application, packaged the same way EyesRhythm ships both platfo
 
 The app ships with no API key. Paste your own in Settings. It is stored in the system keychain (macOS Keychain or Windows Credential Manager), never in `settings.json` and never in this repository.
 
-## Download for Mac
+## Download
 
-A Mac build is published as a disk image you can download. Pick the file that matches Apple menu → About This Mac:
+Pick the file for your computer from the [v1.0.0-test prerelease](https://github.com/pranaycv/ScreenQuery/releases/tag/v1.0.0-test). GitHub rebuilds them from this branch.
 
 - Apple silicon (M1 or later): [ScreenQuery-arm64.dmg](https://github.com/pranaycv/ScreenQuery/releases/download/v1.0.0-test/ScreenQuery-arm64.dmg)
-- Intel: [ScreenQuery-x86_64.dmg](https://github.com/pranaycv/ScreenQuery/releases/download/v1.0.0-test/ScreenQuery-x86_64.dmg)
+- Intel Mac: [ScreenQuery-x86_64.dmg](https://github.com/pranaycv/ScreenQuery/releases/download/v1.0.0-test/ScreenQuery-x86_64.dmg)
+- Windows 10 or later: [ScreenQuery.exe](https://github.com/pranaycv/ScreenQuery/releases/download/v1.0.0-test/ScreenQuery.exe)
 
-Both files are on the [v1.0.0-test prerelease](https://github.com/pranaycv/ScreenQuery/releases/tag/v1.0.0-test). GitHub rebuilds them from this branch on a Mac.
+On Windows, double-click `ScreenQuery.exe`. There is no installer. The first time, Windows may ask you to keep the app because it is not signed.
 
 The build is not notarized, so macOS warns the first time.
 

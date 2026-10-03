@@ -1,4 +1,4 @@
-name: macOS DMG
+name: macOS DMG and Windows exe
 
 on:
   push:
@@ -47,6 +47,14 @@ jobs:
           "$py" -c "import sys, tkinter; print(sys.executable, sys.version, 'tk', tkinter.TkVersion)"
           echo "python=$py" >> "$GITHUB_OUTPUT"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Build the settings UI
+        working-directory: frontend
+        run: npm ci && npm run build
+
       - name: Build the disk image
         env:
           PYTHON: ${{ steps.python.outputs.python }}
@@ -63,9 +71,38 @@ jobs:
           path: dist/ScreenQuery-${{ matrix.arch }}.dmg
           if-no-files-found: error
 
+  windows:
+    name: Build Windows exe
+    timeout-minutes: 45
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Build the settings UI
+        working-directory: frontend
+        run: npm ci && npm run build
+
+      - name: Build ScreenQuery.exe
+        shell: pwsh
+        run: ./scripts/build-windows.ps1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ScreenQuery-windows
+          path: dist/ScreenQuery.exe
+          if-no-files-found: error
+
   release:
-    name: Publish test DMGs
-    needs: build
+    name: Publish test DMGs and exe
+    needs: [build, windows]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -83,9 +120,9 @@ jobs:
         run: |
           set -euo pipefail
           shopt -s nullglob
-          files=(dist/*.dmg)
+          files=(dist/*.dmg dist/*.exe)
           if [[ ${#files[@]} -eq 0 ]]; then
-            echo "No DMG was produced." >&2
+            echo "No DMG or exe was produced." >&2
             exit 1
           fi
           ls -lh "${files[@]}"
@@ -94,16 +131,16 @@ jobs:
             gh release edit v1.0.0-test \
               --prerelease \
               --target "$GITHUB_SHA" \
-              --title "ScreenQuery macOS test build" \
+              --title "ScreenQuery test build" \
               --notes-file scripts/release-notes-macos.txt
           else
             gh release create v1.0.0-test "${files[@]}" \
               --prerelease \
               --target "$GITHUB_SHA" \
-              --title "ScreenQuery macOS test build" \
-              --notes-file scripts/release-notes-macos.txt
+              --notes-file scripts/release-notes-macos.txt \
+              --title "ScreenQuery test build"
           fi
-          if [[ "${{ needs.build.result }}" != "success" ]]; then
-            echo "One of the Mac builds failed. Publishing the disk images that succeeded." >&2
+          if [[ "${{ needs.build.result }}" != "success" || "${{ needs.windows.result }}" != "success" ]]; then
+            echo "A build failed. Publishing the files that succeeded." >&2
             exit 1
           fi

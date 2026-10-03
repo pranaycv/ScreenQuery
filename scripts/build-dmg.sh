@@ -32,6 +32,14 @@ python -c "import sys, tkinter; print(sys.executable, sys.version)" || {
   exit 1
 }
 
+if [[ ! -f frontend/dist/index.html ]]; then
+  if ! command -v npm >/dev/null 2>&1; then
+    echo "frontend/dist is missing. In frontend/, run: npm ci && npm run build" >&2
+    exit 1
+  fi
+  (cd frontend && npm ci && npm run build)
+fi
+
 mkdir -p build
 python - <<'PY'
 from pathlib import Path
@@ -80,6 +88,9 @@ python -m PyInstaller \
   --hidden-import keyring.backends.macOS \
   --hidden-import pynput.keyboard._darwin \
   --hidden-import pystray._darwin \
+  --hidden-import webview \
+  --hidden-import webview.platforms.cocoa \
+  --add-data "frontend/dist:frontend/dist" \
   screenquery/__main__.py
 
 python - <<'PY'

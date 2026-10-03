@@ -21,7 +21,16 @@ def macos_launch_agent_path(home: Path | None = None) -> Path:
 
 
 def launch_command() -> list[str]:
-    """How to start ScreenQuery again at login."""
+    """How to start ScreenQuery again at login.
+
+    On macOS the installed app is one TCC identity. A login item that runs
+    the virtualenv Python is a second binary, so Screen Recording approval
+    does not carry over.
+    """
+    if sys.platform == "darwin":
+        installed = Path("/Applications/ScreenQuery.app/Contents/MacOS/ScreenQuery")
+        if installed.is_file():
+            return [str(installed)]
     if getattr(sys, "frozen", False):
         return [sys.executable]
     return [sys.executable, "-m", "screenquery"]

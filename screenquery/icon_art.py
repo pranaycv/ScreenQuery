@@ -1,37 +1,54 @@
-"""Small viewfinder icon drawn with Pillow for the tray and frozen builds."""
+"""ScreenQuery mark in the EyesRhythm family.
+
+Same soft blue rounded square (#5B9FE0, same corner radius). The glyph is a
+white screen with a question mark: a capture you can ask about, not an eye.
+"""
 
 from __future__ import annotations
 
+from pathlib import Path
+
+# EyesRhythm brand blue, mist, and ink.
+BLUE = (91, 159, 224, 255)
+WHITE = (255, 255, 255, 255)
+INK = (26, 42, 56, 255)
+
+_FONT = Path(__file__).resolve().parents[1] / "frontend" / "public" / "fonts" / "Inter-Bold.ttf"
+
 
 def draw_icon(size: int = 64):
-    from PIL import Image, ImageDraw
+    from PIL import Image, ImageDraw, ImageFont
 
-    image = Image.new("RGBA", (size, size), (47, 111, 255, 255))
-    draw = ImageDraw.Draw(image)
-    margin = int(size * 0.18)
-    arm = int(size * 0.28)
-    thick = max(2, int(size * 0.08))
-    color = (255, 255, 255, 255)
-    # Four viewfinder corners.
-    pairs = (
-        (margin, margin, 1, 1),
-        (size - margin, margin, -1, 1),
-        (margin, size - margin, 1, -1),
-        (size - margin, size - margin, -1, -1),
+    canvas = size if size >= 512 else max(size * 8, 256)
+    image = Image.new("RGBA", (canvas, canvas), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(image, "RGBA")
+    unit = canvas / 128.0
+
+    def at(value: float) -> float:
+        return value * unit
+
+    draw.rounded_rectangle(
+        [at(4), at(4), at(124), at(124)],
+        radius=at(36),
+        fill=BLUE,
     )
-    for x, y, sx, sy in pairs:
-        hx = x if sx > 0 else x - arm
-        draw.rectangle((hx, y - thick // 2, hx + arm, y + thick // 2), fill=color)
-        vy = y if sy > 0 else y - arm
-        vx = x - thick // 2 if sx > 0 else x - thick // 2
-        draw.rectangle((vx, vy, vx + thick, vy + arm), fill=color)
-    center = size // 2
-    radius = int(size * 0.12)
-    draw.ellipse(
-        (center - radius, center - radius, center + radius, center + radius),
-        outline=color,
-        width=thick,
+    # Screenshot card. Same visual mass as EyesRhythm's eye, rectangular.
+    draw.rounded_rectangle(
+        [at(26), at(34), at(102), at(94)],
+        radius=at(16),
+        fill=WHITE,
     )
-    dot = max(2, thick // 2)
-    draw.ellipse((center - dot, center - dot, center + dot, center + dot), fill=color)
+    font_size = max(8, int(round(40 * unit)))
+    font = _font(font_size)
+    draw.text((at(64), at(64)), "?", font=font, fill=INK, anchor="mm")
+    if canvas != size:
+        image = image.resize((size, size), Image.Resampling.LANCZOS)
     return image
+
+
+def _font(size: int):
+    from PIL import ImageFont
+
+    if _FONT.is_file():
+        return ImageFont.truetype(str(_FONT), size=size)
+    return ImageFont.load_default()

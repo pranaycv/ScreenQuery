@@ -30,6 +30,7 @@ class Settings:
     custom_folder: str | None = None
     base_url: str = DEFAULT_BASE_URL
     model: str = DEFAULT_MODEL
+    clipboard_enabled: bool = True
 
     def to_dict(self) -> dict:
         return {
@@ -38,6 +39,7 @@ class Settings:
             "custom_folder": self.custom_folder,
             "base_url": self.base_url,
             "model": self.model,
+            "clipboard_enabled": self.clipboard_enabled,
         }
 
     @classmethod
@@ -47,12 +49,14 @@ class Settings:
             folder = None
         base_url = raw.get("base_url")
         model = raw.get("model")
+        clipboard = raw.get("clipboard_enabled", True)
         return cls(
             save_enabled=bool(raw.get("save_enabled", True)),
             llm_enabled=bool(raw.get("llm_enabled", False)),
             custom_folder=folder,
             base_url=base_url if isinstance(base_url, str) and base_url.strip() else DEFAULT_BASE_URL,
             model=model if isinstance(model, str) and model.strip() else DEFAULT_MODEL,
+            clipboard_enabled=bool(clipboard),
         )
 
 

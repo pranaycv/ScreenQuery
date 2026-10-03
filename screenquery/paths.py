@@ -1,7 +1,8 @@
 """Screenshot folders and unique PNG names.
 
-Default: ~/ScreenQuery/<YYYY-MM-DD>/ScreenQuery-<timestamp>.png
-Custom folder: files are written directly in that folder.
+Both the default folder and a chosen folder use the same layout:
+<base>/<YYYY-MM-DD>/ScreenQuery-<HHmmss>-<milliseconds>.png
+Default base is ~/ScreenQuery.
 """
 
 from __future__ import annotations
@@ -19,13 +20,12 @@ def resolve_directory(
     home: Path,
 ) -> Path:
     custom = normalized_custom_folder(custom_folder, home)
-    if custom is not None:
-        return custom
-    return home / APP_FOLDER_NAME / day_folder(when)
+    base = custom if custom is not None else home / APP_FOLDER_NAME
+    return base / day_folder(when)
 
 
 def filename(when: datetime) -> str:
-    stamp = when.strftime("%Y%m%d-%H%M%S")
+    stamp = when.strftime("%H%M%S")
     millis = when.microsecond // 1000
     return f"ScreenQuery-{stamp}-{millis:03d}.png"
 

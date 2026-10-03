@@ -75,9 +75,22 @@ class OpenAIRequestTests(unittest.TestCase):
         self.assertEqual(body["max_tokens"], MAX_OUTPUT_TOKENS)
         self.assertNotIn("max_completion_tokens", body)
         content = body["messages"][0]["content"]
-        self.assertIn("ScreenQuery", content[0]["text"])
+        prompt = content[0]["text"]
+        self.assertIn("ScreenQuery", prompt)
+        self.assertIn("two or three sentences", prompt)
+        self.assertIn("very easy words", prompt)
+        self.assertNotIn("one word", prompt)
         self.assertTrue(content[1]["image_url"]["url"].startswith("data:image/jpeg;base64,"))
         self.assertEqual(content[1]["image_url"]["detail"], "auto")
+
+    def test_region_prompt_explains_a_word_or_a_line(self):
+        body = json.loads(json_body("gpt-4o", b"pixels", "image/jpeg", kind="region"))
+        prompt = body["messages"][0]["content"][0]["text"]
+        self.assertIn("one word", prompt)
+        self.assertIn("one line", prompt)
+        self.assertIn("means", prompt)
+        self.assertIn("very easy words", prompt)
+        self.assertEqual(body["messages"][0]["content"][1]["image_url"]["detail"], "high")
         raw = json.dumps(body)
         self.assertNotIn("sk-", raw)
         self.assertNotIn("Bearer", raw)

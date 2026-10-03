@@ -6,11 +6,9 @@ from __future__ import annotations
 def permission_help(platform: str) -> str:
     if platform == "darwin":
         return (
-            "macOS needs Screen Recording to capture the display, and Input Monitoring "
-            "for the global Shift+S+P hotkey. If that hotkey prompt is listed under "
-            "Accessibility, allow it there too. A copy started from a terminal and an "
-            "installed .app are different apps to macOS. After you allow access, quit "
-            "ScreenQuery and open it again."
+            "Turn on ScreenQuery under Privacy & Security → Screen & System Audio Recording "
+            "(Capture Now) and Input Monitoring (Shift+S+P and Shift+S+O). "
+            "ScreenQuery asks once, then opens those panes. It does not ask on every capture."
         )
     if platform == "win32":
         return (
